@@ -1,6 +1,7 @@
 package io.renren.xss;
 
 import io.renren.utils.RRException;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -15,6 +16,8 @@ public class SQLFilter {
      * SQL注入过滤
      * @param str  待验证的字符串
      */
+    static String suffix_time="_time";
+    static String suffix_date="_date";
     public static String sqlInject(String str){
         if(StringUtils.isBlank(str)){
             return null;
@@ -33,7 +36,7 @@ public class SQLFilter {
 
         //判断是否包含非法字符
         for(String keyword : keywords){
-            if(str.indexOf(keyword) != -1){
+            if(str.indexOf(keyword) != -1&&!str.endsWith(suffix_date)&&!str.endsWith(suffix_time)){
                 throw new RRException("包含非法字符");
             }
         }
