@@ -43,8 +43,9 @@ public class SysMenuController extends AbstractController {
 		int total = sysMenuService.queryTotal(query);
 		
 		PageUtils pageUtil = new PageUtils(menuList, total, query.getLimit(), query.getPage());
-		
-		return R.ok().put("page", pageUtil);
+		R ok = R.ok();
+		ok.put("page", pageUtil);
+        return ok;
 	}
 	
 	/**

@@ -48,14 +48,7 @@
 	<select id="queryList" resultType="io.renren.entity.SysMenuEntity">
 		select m.*,(select p.name from sys_menu p where p.menu_id = m.parent_id) as parentName 
 			from sys_menu m
-		<where>
-			<if test="name != null and name.trim() != ''">
-				and `name` like concat('%',#{name},'%') 
-			</if>
-			<if test="siteSource != null and siteSource.trim() != ''">
-				and `site_source` like concat('%',#{siteSource},'%') 
-			</if>
-		</where>
+		<include refid="queryParams"/>
 		<choose>
 			<when test="sidx != null and sidx.trim() != ''">
 				order by m.${sidx} ${order}
@@ -79,7 +72,8 @@
 	</select>
 	
 	<select id="queryTotal" resultType="int">
-		select count(*) from sys_menu
+		select count(*) from sys_menu m
+		<include refid="queryParams"/>
 	</select>
 	 <!-- 查询系统的所有菜单ID --> 
 	<select id="queryAllMenuIdBySiteSource" resultType="long">
@@ -114,4 +108,15 @@
 		</foreach>
 	</delete>
 	
+	
+	<sql id="queryParams">
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and `name` like concat('%',#{name},'%') 
+			</if>
+			<if test="siteSource != null and siteSource.trim() != ''">
+				and `site_source` like concat('%',#{siteSource},'%') 
+			</if>
+		</where>
+	</sql>
 </mapper>
