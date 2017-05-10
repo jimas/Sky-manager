@@ -5,6 +5,7 @@ $(function () {
         colModel: [			
 			{ label: '菜单ID', name: 'menuId', index: "menu_id", width: 40, key: true },
 			{ label: '菜单名称', name: 'name', width: 60 },
+			{ label: '菜单编码', name: 'code', width: 60 },
 			{ label: '上级菜单', name: 'parentName', sortable: false, width: 60 },
 			{ label: '菜单图标', name: 'icon', sortable: false, width: 50, formatter: function(value, options, row){
 				return value == null ? '' : '<i class="'+value+' fa-lg"></i>';
@@ -22,7 +23,8 @@ $(function () {
 					return '<span class="label label-warning">按钮</span>';
 				}
 			}},
-			{ label: '排序号', name: 'orderNum', index: "order_num", width: 50}
+			{ label: '排序号', name: 'orderNum', index: "order_num", width: 50},
+			{ label: '来源系统', name: 'siteSource', index: "site_source", width: 50}
         ],
 		viewrecords: true,
         height: 385,
@@ -88,6 +90,9 @@ var vm = new Vue({
 				
 				vm.menu.parentName = node.name;
 			})
+		},
+		query: function () {
+			vm.reload();
 		},
 		add: function(){
 			vm.showList = false;
@@ -165,7 +170,7 @@ var vm = new Vue({
 					//选择上级菜单
 					vm.menu.parentId = node[0].menuId;
 					vm.menu.parentName = node[0].name;
-					
+					vm.menu.siteSource = node[0].siteSource;
 					layer.close(index);
 	            }
 			});
@@ -174,6 +179,7 @@ var vm = new Vue({
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
+				postData:{'name': vm.menu.name},
                 page:page
             }).trigger("reloadGrid");
 		}

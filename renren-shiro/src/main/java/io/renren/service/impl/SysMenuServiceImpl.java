@@ -14,6 +14,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 
 @Service("sysMenuService")
@@ -40,7 +41,16 @@ public class SysMenuServiceImpl implements SysMenuService {
 		}
 		return userMenuList;
 	}
-
+	@Override
+    public List<SysMenuEntity> queryListSiteSource(String siteSource) {
+	  //系统管理员，拥有最高权限
+        if(StringUtils.isEmpty(siteSource)){
+            siteSource="selfsource";
+        }
+        //系统菜单ID列表
+        List<Long> menuIdList = sysMenuDao.queryAllMenuIdBySiteSource(siteSource);
+        return getAllMenuList(menuIdList);
+    }
 	@Override
 	public List<SysMenuEntity> queryNotButtonList() {
 		return sysMenuDao.queryNotButtonList();
@@ -121,4 +131,5 @@ public class SysMenuServiceImpl implements SysMenuService {
 		
 		return subMenuList;
 	}
+   
 }

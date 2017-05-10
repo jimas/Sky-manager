@@ -2,9 +2,12 @@ package io.renren.controller;
 
 import io.renren.annotation.SysLog;
 import io.renren.entity.SysMenuEntity;
+import io.renren.entity.SystemEntity;
 import io.renren.service.SysMenuService;
+import io.renren.service.SystemService;
 import io.renren.utils.*;
 import io.renren.utils.Constant.MenuType;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,8 @@ import java.util.Map;
 public class SysMenuController extends AbstractController {
 	@Autowired
 	private SysMenuService sysMenuService;
-	
+	@Autowired
+    private SystemService systemService;
 	/**
 	 * 所有菜单列表
 	 */
@@ -55,11 +59,25 @@ public class SysMenuController extends AbstractController {
 		//添加顶级菜单
 		SysMenuEntity root = new SysMenuEntity();
 		root.setMenuId(0L);
-		root.setName("一级菜单");
-		root.setParentId(-1L);
+		root.setName("本系统菜单");
+		root.setParentId(-11L);
+		root.setSiteSource("selfsource");
 		root.setOpen(true);
 		menuList.add(root);
-		
+		Map<String, Object> map=new HashMap<String, Object>();
+        List<SystemEntity> systemList = systemService.queryList(map);
+        int ll=0;
+        for (SystemEntity systemEntity : systemList) {
+            //添加顶级菜单
+            root = new SysMenuEntity();
+            root.setMenuId((long) --ll);
+            root.setName(systemEntity.getSysCode());
+            root.setSiteSource(systemEntity.getSysCode());
+            root.setParentId(-11L);
+            root.setOpen(true);
+            menuList.add(root);
+
+        }
 		return R.ok().put("menuList", menuList);
 	}
 	
@@ -170,7 +188,7 @@ public class SysMenuController extends AbstractController {
 		
 		//上级菜单类型
 		int parentType = MenuType.CATALOG.getValue();
-		if(menu.getParentId() != 0){
+		if(menu.getParentId() > 0){
 			SysMenuEntity parentMenu = sysMenuService.queryObject(menu.getParentId());
 			parentType = parentMenu.getType();
 		}

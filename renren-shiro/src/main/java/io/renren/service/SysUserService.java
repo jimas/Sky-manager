@@ -20,7 +20,6 @@ public interface SysUserService {
 	 * @param userId  用户ID
 	 */
 	List<String> queryAllPerms(Long userId);
-	
 	/**
 	 * 查询用户的所有菜单ID
 	 */

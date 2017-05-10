@@ -18,6 +18,10 @@ public class SysMenuEntity implements Serializable {
 	 * 菜单ID
 	 */
 	private Long menuId;
+	/**
+	 * 系统来源
+	 */
+	private String siteSource;
 
 	/**
 	 * 父菜单ID，一级菜单为0
@@ -29,6 +33,10 @@ public class SysMenuEntity implements Serializable {
 	 */
 	private String parentName;
 
+	/**
+	 * 菜单code
+	 */
+	private String code;
 	/**
 	 * 菜单名称
 	 */
@@ -97,8 +105,18 @@ public class SysMenuEntity implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
 
-	/**
+	public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
 	 * 获取：菜单名称
 	 * @return String
 	 */
@@ -193,4 +211,13 @@ public class SysMenuEntity implements Serializable {
 	public void setOpen(Boolean open) {
 		this.open = open;
 	}
+
+    public String getSiteSource() {
+        return siteSource;
+    }
+
+    public void setSiteSource(String siteSource) {
+        this.siteSource = siteSource;
+    }
+	
 }

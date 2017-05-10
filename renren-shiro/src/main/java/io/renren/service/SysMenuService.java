@@ -26,7 +26,10 @@ public interface SysMenuService {
 	 * 获取不包含按钮的菜单列表
 	 */
 	List<SysMenuEntity> queryNotButtonList();
-	
+	/**
+     * 获取系统菜单列表
+     */
+    List<SysMenuEntity> queryListSiteSource(String siteSource);
 	/**
 	 * 获取用户菜单列表
 	 */

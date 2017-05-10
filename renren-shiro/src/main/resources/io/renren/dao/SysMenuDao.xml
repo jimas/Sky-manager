@@ -17,7 +17,10 @@
 			`perms`, 
 			`type`, 
 			`icon`, 
-			`order_num`
+			`order_num`,
+			`site_source`,
+			`code`
+			
 		)
 		values
 		(
@@ -28,7 +31,9 @@
 			#{perms}, 
 			#{type}, 
 			#{icon}, 
-			#{orderNum}
+			#{orderNum},
+			#{siteSource},
+			#{code}
 		)
 	</insert>
 	
@@ -43,6 +48,14 @@
 	<select id="queryList" resultType="io.renren.entity.SysMenuEntity">
 		select m.*,(select p.name from sys_menu p where p.menu_id = m.parent_id) as parentName 
 			from sys_menu m
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and `name` like concat('%',#{name},'%') 
+			</if>
+			<if test="siteSource != null and siteSource.trim() != ''">
+				and `site_source` like concat('%',#{siteSource},'%') 
+			</if>
+		</where>
 		<choose>
 			<when test="sidx != null and sidx.trim() != ''">
 				order by m.${sidx} ${order}
@@ -68,7 +81,11 @@
 	<select id="queryTotal" resultType="int">
 		select count(*) from sys_menu
 	</select>
-	 
+	 <!-- 查询系统的所有菜单ID --> 
+	<select id="queryAllMenuIdBySiteSource" resultType="long">
+		select distinct m.menu_id from sys_menu m
+		where m.site_source = #{siteSource}
+	</select>
 	<update id="update" parameterType="io.renren.entity.SysMenuEntity">
 		update sys_menu 
 		<set> 
@@ -78,7 +95,9 @@
 			<if test="perms != null">`perms` = #{perms}, </if>
 			<if test="type != null">`type` = #{type}, </if>
 			<if test="icon != null">`icon` = #{icon}, </if>
-			<if test="orderNum != null">`order_num` = #{orderNum}</if>
+			<if test="orderNum != null">`order_num` = #{orderNum},</if>
+			<if test="siteSource != null">`site_source` = #{siteSource},</if>
+			<if test="code != null">`code` = #{code}</if>
 		</set>
 		where menu_id = #{menuId}
 	</update>
