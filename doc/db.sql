@@ -1,8 +1,21 @@
+-- 来源系统
+CREATE TABLE `sys_system` (
+  `sys_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sys_code` varchar(20) DEFAULT NULL,
+  `sys_desc` varchar(100) DEFAULT NULL,
+  `sys_url` varchar(50) DEFAULT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`sys_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统列表'
+
 -- 菜单
 CREATE TABLE `sys_menu` (
   `menu_id` bigint NOT NULL AUTO_INCREMENT,
   `parent_id` bigint COMMENT '父菜单ID，一级菜单为0',
   `name` varchar(50) COMMENT '菜单名称',
+  `code` varchar(50) COMMENT '菜单编码',
+  `site_source` varchar(20) NOT NULL DEFAULT 'selfsource' COMMENT '来源系统',
   `url` varchar(200) COMMENT '菜单URL',
   `perms` varchar(500) COMMENT '授权(多个用逗号分隔，如：user:list,user:create)',
   `type` int COMMENT '类型   0：目录   1：菜单   2：按钮',
